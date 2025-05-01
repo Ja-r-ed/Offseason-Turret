@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "Robot.h"
-#include "subsystems/SubElevator.h"
 #include <frc/DataLogManager.h>
 #include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -15,9 +14,6 @@ Robot::Robot() {
   frc::DataLogManager::Start();
   frc::SmartDashboard::PutData( &frc2::CommandScheduler::GetInstance() );
   frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog());
-  URCL::Start(std::map<int, std::string_view>{{canid::CLIMBER_MOTOR, "Climber"},
-                                              {canid::ENDEFFECTOR_MOTOR, "EndEffector"},
-                                              {canid::FUNNEL_MOTOR, "Funnel"}});
 }
 
 void Robot::RobotPeriodic() {
@@ -31,14 +27,6 @@ void Robot::DisabledPeriodic() {}
 void Robot::DisabledExit() {}
 
 void Robot::AutonomousInit() {
-  m_autonomousCommand = m_container.GetAutonomousCommand();
-
-  if (m_autonomousCommand) {
-    m_autonomousCommand->Schedule();
-  }
-
-//Auto climber reset by bringing elevator to zero position then reset
-  SubElevator::GetInstance().ElevatorAutoReset();
 } 
 
 void Robot::AutonomousPeriodic() {}
@@ -46,9 +34,6 @@ void Robot::AutonomousPeriodic() {}
 void Robot::AutonomousExit() {}
 
 void Robot::TeleopInit() {
-  if (m_autonomousCommand) {
-    m_autonomousCommand->Cancel();
-  }
 }
 
 void Robot::TeleopPeriodic() {}
