@@ -4,7 +4,11 @@
 
 #include "subsystems/SubShooter.h"
 
-SubShooter::SubShooter() = default;
+SubShooter::SubShooter() {
+
+}
 
 // This method will be called once per scheduler run
-void SubShooter::Periodic() {}
+void SubShooter::Periodic() {
+
+}
