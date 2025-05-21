@@ -3,8 +3,60 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "subsystems/SubHood.h"
+#include "frc/smartdashboard/SmartDashboard.h"
+#include "frc/RobotBase.h"
 
-SubHood::SubHood() = default;
+SubHood::SubHood() {
+    frc::SmartDashboard::PutData("Hood/Motor", &_hoodMotor);
+
+    _hoodMotorConfig.encoder.PositionConversionFactor(1/GEAR_RATIO);
+    _hoodMotorConfig.encoder.VelocityConversionFactor(GEAR_RATIO/1);
+    _hoodMotorConfig.closedLoop.Pid(P, I, D, rev::spark::ClosedLoopSlot::kSlot0);
+
+}
 
 // This method will be called once per scheduler run
-void SubHood::Periodic() {}
+void SubHood::Periodic() {
+
+}
+
+frc2::CommandPtr SubHood::SetHoodPosition(units::degree_t angle) {
+    return RunOnce([this, angle] {_hoodMotor.SetPositionTarget(angle);});
+}
+
+
+frc2::CommandPtr SubHood::ZeroHood() {
+    return RunOnce([this] {_resetting = true;}).AndThen(ManualHoodDown())
+    .AndThen(HoodResetCheck()).AndThen([this] {_hoodMotor.SetPosition(0_deg);})
+    .FinallyDo([this] {
+        _hoodMotor.StopMotor();
+        _resetting = false;
+    });
+}
+
+frc2::CommandPtr SubHood::HoodResetCheck() {
+    return RunOnce([this] {_hasreset = false;}).AndThen(Run([this] {
+        if(GetHoodMotorCurrent() > zeroingCurrentLimit) {
+            _hasreset = true;
+        }
+
+        if(frc::RobotBase::IsSimulation() == true) {
+            _hasreset = true;
+        }
+    }).Until([this] {return _hasreset;}));
+}
+
+units::ampere_t SubHood::GetHoodMotorCurrent() {
+    return _hoodMotor.GetOutputCurrent()*1_A;
+}
+
+
+frc2::CommandPtr SubHood::StowHood() {
+    return RunOnce([this] {_hoodMotor.SetPositionTarget(STOW_TURNS);});
+}
+
+frc2::CommandPtr SubHood::ManualHoodDown() {
+    return StartEnd([this] {_hoodMotor.SetVoltage(-1_V);}, 
+    [this] {auto targRot = _hoodMotor.GetPosition();
+    _hoodMotor.SetMaxMotionTarget(targRot);});
+}

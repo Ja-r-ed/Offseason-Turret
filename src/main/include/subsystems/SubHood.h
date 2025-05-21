@@ -6,16 +6,46 @@
 
 #include <frc2/command/SubsystemBase.h>
 
+#include "utilities/ICSparkMax.h"
+#include "Constants.h"
+#include <frc2/command/CommandPtr.h>
+#include <frc2/command/Commands.h>
+#include <units/angle.h>
+
 class SubHood : public frc2::SubsystemBase {
  public:
   SubHood();
 
+  frc2::CommandPtr SetHoodPosition(units::degree_t angle);
+  frc2::CommandPtr ZeroHood();
+  frc2::CommandPtr HoodResetCheck(); 
+  units::ampere_t GetHoodMotorCurrent();
+  frc2::CommandPtr ManualHoodDown(); 
+  frc2::CommandPtr StowHood(); 
+  
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
 
  private:
+
+  double P = 0.0;
+  double I = 0.0;
+  double D = 0.0;
+
+  units::ampere_t zeroingCurrentLimit = 10_A;
+
+  bool _resetting;
+  bool _hasreset;
+
+  units::turn_t STOW_TURNS = 0_tr;
+
+
+
+  double GEAR_RATIO = 1/113.75;
+  ICSparkMax _hoodMotor{canid::SHOOTER_MOTOR_1, 30_A};
+  rev::spark::SparkBaseConfig _hoodMotorConfig;
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };
