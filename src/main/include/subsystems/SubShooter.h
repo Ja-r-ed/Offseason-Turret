@@ -14,9 +14,9 @@ class SubShooter : public frc2::SubsystemBase {
  public:
   SubShooter();
 
-  frc2::CommandPtr SetShooterSpeed(double speed);
-  frc2::CommandPtr SpinUpShooter;
-  frc2::CommandPtr StopShooter;
+  frc2::CommandPtr SetShooterSpeed(units::turns_per_second_t speed);
+  frc2::CommandPtr SpinUpShooter();
+  frc2::CommandPtr StopShooter();
 
   
 
@@ -26,9 +26,17 @@ class SubShooter : public frc2::SubsystemBase {
   void Periodic() override;
 
  private:
-  constexpr double GEAR_RATIO = 1/2;
+  double GEAR_RATIO = 1/2;
   ICSparkMax _shooterMotor1{canid::SHOOTER_MOTOR_1, 30_A};
   ICSparkMax _shooterMotor2{canid::SHOOTER_MOTOR_2, 30_A};
+
+  double P = 0;
+  double I = 0;
+  double D = 0;
+  units::turns_per_second_t SHOOTER_SPEED = 1_tps;
+
+  rev::spark::SparkBaseConfig _shooterMotor1Config;
+  rev::spark::SparkBaseConfig _shooterMotor2Config;
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };
