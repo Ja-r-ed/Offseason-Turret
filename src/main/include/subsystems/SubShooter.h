@@ -13,7 +13,10 @@
 class SubShooter : public frc2::SubsystemBase {
  public:
   SubShooter();
-
+  static SubShooter& GetInstance() {
+    static SubShooter inst;
+    return inst;
+  }
   frc2::CommandPtr SetShooterSpeed(units::turns_per_second_t speed);
   frc2::CommandPtr SpinUpShooter();
   frc2::CommandPtr StopShooter();

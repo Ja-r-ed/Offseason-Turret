@@ -8,7 +8,8 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/Filesystem.h>
 #include <wpinet/WebServer.h>
-
+#include "subsystems/SubShooter.h"
+#include "subsystems/SubHood.h"
 RobotContainer::RobotContainer() {
   wpi::WebServer::GetInstance().Start(5800, frc::filesystem::GetDeployDirectory());
   SubVision::GetInstance();
@@ -19,5 +20,8 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureBindings() {
-
+  _driverController.A().OnTrue(SubShooter::GetInstance().SpinUpShooter());
+  _driverController.B().OnTrue(SubShooter::GetInstance().StopShooter());
+  _driverController.X().OnTrue(SubHood::GetInstance().StowHood());
+  _driverController.Y().OnTrue(SubHood::GetInstance().SetHoodPosition(90_deg));
 }

@@ -9,7 +9,10 @@
 class SubTurret : public frc2::SubsystemBase {
  public:
   SubTurret();
-
+  static SubTurret& GetInstance() {
+    static SubTurret inst;
+    return inst;
+  }
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
