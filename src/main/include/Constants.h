@@ -20,6 +20,8 @@ namespace canid {
     constexpr int SHOOTER_MOTOR_1 = 13;
     constexpr int SHOOTER_MOTOR_2 = 14;
 
+    constexpr int TURRET_MOTOR = 15;
+
     constexpr int PIGEON_2 = 19; 
 }
 
