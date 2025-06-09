@@ -15,10 +15,14 @@
 class SubHood : public frc2::SubsystemBase {
  public:
   SubHood();
+<<<<<<< HEAD
   static SubHood& GetInstance() {
     static SubHood inst;
     return inst;
   }
+=======
+
+>>>>>>> d95f4ddd9fbbfb14d3fb332769a60d69d5489b66
   frc2::CommandPtr SetHoodPosition(units::degree_t angle);
   frc2::CommandPtr ZeroHood();
   frc2::CommandPtr HoodResetCheck(); 
