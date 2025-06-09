@@ -22,7 +22,7 @@ void SubTurret::Periodic() {
 }
 
 double SubTurret::GetTurretAngle(double encoder1, double encoder2) {
-    double difference = encoder1 = encoder2;
+    double difference = encoder1 - encoder2;
     double angle = difference * (ENCODER1_RATIO - ENCODER2_RATIO);
     return angle;
 }
