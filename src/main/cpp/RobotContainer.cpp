@@ -15,6 +15,9 @@
 RobotContainer::RobotContainer() {
   wpi::WebServer::GetInstance().Start(5800, frc::filesystem::GetDeployDirectory());
   SubVision::GetInstance();
+  SubShooter::GetInstance();
+  SubTurret::GetInstance();
+  SubHood::GetInstance();
 
   // Trigger Bindings
   ConfigureBindings();

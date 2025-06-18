@@ -37,7 +37,7 @@ class SubShooter : public frc2::SubsystemBase {
   void Periodic() override;
 
  private:
-  double GEAR_RATIO = 1/2;
+  double GEAR_RATIO = 1.0/2;
   ICSparkMax _shooterMotor1{canid::SHOOTER_MOTOR_1, 30_A};
   ICSparkMax _shooterMotor2{canid::SHOOTER_MOTOR_2, 30_A};
   static constexpr units::kilogram_square_meter_t MOI = 0.05_kg_sq_m;

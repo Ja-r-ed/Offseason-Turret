@@ -38,9 +38,9 @@ class SubTurret : public frc2::SubsystemBase {
   double I = 0;
   double D = 0;
   
-  static constexpr double ENCODER1_RATIO = 0.17391304347; //20/115
-  static constexpr double ENCODER2_RATIO = 0.19130434782; //22/115
-  static constexpr double GEAR_RATIO = 0.02173913043; //1/46
+  static constexpr double ENCODER1_RATIO = 20.0/115; //20/115
+  static constexpr double ENCODER2_RATIO = 22.0/115; //22/115
+  static constexpr double GEAR_RATIO = 1.0/46; //1/46
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };
