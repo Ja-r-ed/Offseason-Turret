@@ -7,6 +7,8 @@
 #include <frc2/command/SubsystemBase.h>
 #include "utilities/ICSparkMax.h"
 #include "Constants.h"
+#include <frc2/command/CommandPtr.h>
+#include <frc2/command/Commands.h>
 
 class SubTurret : public frc2::SubsystemBase {
  public:
@@ -16,7 +18,10 @@ class SubTurret : public frc2::SubsystemBase {
     return inst;
   }
 
+  void SimulationPeriodic();
+
   double GetTurretAngle(double encoder1, double encoder2);
+  frc2::CommandPtr SetTurretAngle(units::degree_t angle);
 
 
 

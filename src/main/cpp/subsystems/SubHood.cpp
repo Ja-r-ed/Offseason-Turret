@@ -10,7 +10,7 @@ SubHood::SubHood() {
     frc::SmartDashboard::PutData("Hood/Motor", &_hoodMotor);
 
     _hoodMotorConfig.encoder.PositionConversionFactor(1/GEAR_RATIO);
-    _hoodMotorConfig.encoder.VelocityConversionFactor(GEAR_RATIO/1);
+    _hoodMotorConfig.encoder.VelocityConversionFactor(1/GEAR_RATIO/60);
     _hoodMotorConfig.closedLoop.Pid(P, I, D, rev::spark::ClosedLoopSlot::kSlot0);
 
 }
@@ -18,6 +18,10 @@ SubHood::SubHood() {
 // This method will be called once per scheduler run
 void SubHood::Periodic() {
 
+}
+
+void SubHood::SimulationPeriodic() {
+    
 }
 
 frc2::CommandPtr SubHood::SetHoodPosition(units::degree_t angle) {
