@@ -19,6 +19,9 @@ class SubHood : public frc2::SubsystemBase {
     static SubHood inst;
     return inst;
   }
+
+  void SimulationPeriodic();
+
   frc2::CommandPtr SetHoodPosition(units::degree_t angle);
   frc2::CommandPtr ZeroHood();
   frc2::CommandPtr HoodResetCheck(); 
@@ -47,7 +50,7 @@ class SubHood : public frc2::SubsystemBase {
 
 
   double GEAR_RATIO = 1/113.75;
-  ICSparkMax _hoodMotor{canid::SHOOTER_MOTOR_1, 30_A};
+  ICSparkMax _hoodMotor{canid::HOOD_MOTOR, 30_A};
   rev::spark::SparkBaseConfig _hoodMotorConfig;
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.

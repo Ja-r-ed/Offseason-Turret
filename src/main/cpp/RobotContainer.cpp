@@ -8,11 +8,16 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/Filesystem.h>
 #include <wpinet/WebServer.h>
+
 #include "subsystems/SubShooter.h"
 #include "subsystems/SubHood.h"
+#include "subsystems/SubTurret.h"
 RobotContainer::RobotContainer() {
   wpi::WebServer::GetInstance().Start(5800, frc::filesystem::GetDeployDirectory());
   SubVision::GetInstance();
+  SubShooter::GetInstance();
+  SubTurret::GetInstance();
+  SubHood::GetInstance();
 
   // Trigger Bindings
   ConfigureBindings();

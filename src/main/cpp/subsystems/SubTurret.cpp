@@ -9,7 +9,7 @@ SubTurret::SubTurret() {
     frc::SmartDashboard::PutData("Turret/Motor", &_turretMotor);
 
     _turretMotorConfig.encoder.PositionConversionFactor(1/GEAR_RATIO);
-    _turretMotorConfig.encoder.VelocityConversionFactor(GEAR_RATIO/1);
+    _turretMotorConfig.encoder.VelocityConversionFactor(1/GEAR_RATIO/60);
     _turretMotorConfig.closedLoop.Pid(P,I,D, rev::spark::ClosedLoopSlot::kSlot2);
     _turretMotorConfig.SetIdleMode(rev::spark::SparkBaseConfig::IdleMode::kBrake);
     auto err1 = _turretMotor.AdjustConfig(_turretMotorConfig);
@@ -21,8 +21,18 @@ void SubTurret::Periodic() {
     
 }
 
+void SubTurret::SimulationPeriodic() {
+    
+}
+
 double SubTurret::GetTurretAngle(double encoder1, double encoder2) {
-    double difference = encoder1 = encoder2;
+    double difference = encoder1 - encoder2;
     double angle = difference * (ENCODER1_RATIO - ENCODER2_RATIO);
     return angle;
+}
+
+frc2::CommandPtr SubTurret::SetTurretAngle(units::degree_t angle) {
+    return Run([this, angle] {
+        _turretMotor.SetPositionTarget(angle);
+    });
 }

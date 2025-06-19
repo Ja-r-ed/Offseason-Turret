@@ -10,7 +10,7 @@ SubShooter::SubShooter() {
     frc::SmartDashboard::PutData("Shooter/Motor2", &_shooterMotor2);
 
     _shooterMotor1Config.encoder.PositionConversionFactor(1/GEAR_RATIO);
-    _shooterMotor1Config.encoder.VelocityConversionFactor(GEAR_RATIO/1);
+    _shooterMotor1Config.encoder.VelocityConversionFactor(1/GEAR_RATIO/60);
     _shooterMotor1Config.closedLoop.Pid(P,I,D, rev::spark::ClosedLoopSlot::kSlot1);
     _shooterMotor1Config.SetIdleMode(rev::spark::SparkBaseConfig::IdleMode::kCoast);
     auto err1 = _shooterMotor1.AdjustConfig(_shooterMotor1Config);
@@ -24,7 +24,15 @@ SubShooter::SubShooter() {
 
 // This method will be called once per scheduler run
 void SubShooter::Periodic() {
+}
 
+void SubShooter::SimulationPeriodic() {
+    units::volt_t volts = _shooterMotor1.CalcSimVoltage();
+
+    _flywheelSim.SetInputVoltage(volts);
+    _flywheelSim.Update(20_ms);
+    auto velocity = _flywheelSim.GetAngularVelocity();
+    _shooterMotor1.IterateSim(velocity);
 }
 
 frc2::CommandPtr SubShooter::SetShooterSpeed(units::turns_per_second_t speed) {
@@ -39,4 +47,9 @@ frc2::CommandPtr SubShooter::SpinUpShooter() {
 
 frc2::CommandPtr SubShooter::StopShooter() {
     return RunOnce([this] {_shooterMotor1.SetVelocityTarget(0_tps);});
+}
+
+bool SubShooter::IsAtSpeed() {
+    return abs(_shooterMotor1.GetVelocity().value() - _shooterMotor1.GetVelocityTarget().value()) < 0.1 &&
+    abs(_shooterMotor2.GetVelocity().value() - _shooterMotor2.GetVelocityTarget().value()) < 0.1;
 }

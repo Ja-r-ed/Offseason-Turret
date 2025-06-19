@@ -29,4 +29,5 @@ class Robot : public frc::TimedRobot {
   void TestExit() override;
 
  private:
+ RobotContainer _robotContainer;
 };
