@@ -11,6 +11,7 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/Commands.h>
 #include <units/angle.h>
+#include <wpi/interpolating_map.h>
 
 class SubHood : public frc2::SubsystemBase {
  public:
@@ -28,6 +29,7 @@ class SubHood : public frc2::SubsystemBase {
   units::ampere_t GetHoodMotorCurrent();
   frc2::CommandPtr ManualHoodDown(); 
   frc2::CommandPtr StowHood(); 
+  frc2::CommandPtr PivotFromVision(std::function<units::degree_t()> tagAngle);
   
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -47,7 +49,7 @@ class SubHood : public frc2::SubsystemBase {
 
   units::turn_t STOW_TURNS = 0_tr;
 
-
+  wpi::interpolating_map<units::degree_t, units::degree_t> _pitchTable;
 
   double GEAR_RATIO = 1/113.75;
   ICSparkMax _hoodMotor{canid::HOOD_MOTOR, 30_A};

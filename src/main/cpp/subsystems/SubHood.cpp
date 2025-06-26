@@ -11,8 +11,16 @@ SubHood::SubHood() {
 
     _hoodMotorConfig.encoder.PositionConversionFactor(1/GEAR_RATIO);
     _hoodMotorConfig.encoder.VelocityConversionFactor(1/GEAR_RATIO/60);
-    _hoodMotorConfig.closedLoop.Pid(P, I, D, rev::spark::ClosedLoopSlot::kSlot0);
+    _hoodMotorConfig.closedLoop.Pid(P, I, D);
 
+    _pitchTable.insert(-12_deg, 13.75_deg); // molly pitchtable as dummy values
+    _pitchTable.insert(-11_deg, 14.5_deg);
+    _pitchTable.insert(-10_deg, 15.5_deg);
+    _pitchTable.insert(-9_deg, 17_deg);
+    _pitchTable.insert(-4.5_deg, 22.5_deg);
+    _pitchTable.insert(0_deg, 27_deg);
+    _pitchTable.insert(9_deg, 33_deg);
+    _pitchTable.insert(10_deg, 34.5_deg);
 }
 
 // This method will be called once per scheduler run
@@ -26,6 +34,13 @@ void SubHood::SimulationPeriodic() {
 
 frc2::CommandPtr SubHood::SetHoodPosition(units::degree_t angle) {
     return RunOnce([this, angle] {_hoodMotor.SetPositionTarget(angle);});
+}
+
+frc2::CommandPtr SubHood::PivotFromVision(std::function<units::degree_t()> tagAngle) {
+    return Run([this, tagAngle]{
+        _hoodMotor.SetPositionTarget(_pitchTable[tagAngle()]);
+        frc::SmartDashboard::PutNumber("Pivot/TagAngle", tagAngle().value());
+    });
 }
 
 

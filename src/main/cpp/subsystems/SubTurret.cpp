@@ -10,7 +10,7 @@ SubTurret::SubTurret() {
 
     _turretMotorConfig.encoder.PositionConversionFactor(1/GEAR_RATIO);
     _turretMotorConfig.encoder.VelocityConversionFactor(1/GEAR_RATIO/60);
-    _turretMotorConfig.closedLoop.Pid(P,I,D, rev::spark::ClosedLoopSlot::kSlot2);
+    _turretMotorConfig.closedLoop.Pid(P,I,D);
     _turretMotorConfig.SetIdleMode(rev::spark::SparkBaseConfig::IdleMode::kBrake);
     auto err1 = _turretMotor.AdjustConfig(_turretMotorConfig);
     frc::SmartDashboard::PutNumber("Turret/config set err", (int)err1);

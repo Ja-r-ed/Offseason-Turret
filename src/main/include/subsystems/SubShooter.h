@@ -43,7 +43,7 @@ class SubShooter : public frc2::SubsystemBase {
   static constexpr units::kilogram_square_meter_t MOI = 0.05_kg_sq_m;
   static constexpr frc::DCMotor MOTOR_MODEL = frc::DCMotor::NEO();
 
-  double P = 1;
+  double P = 1.0;
   double I = 0;
   double D = 0;
   units::turns_per_second_t SHOOTER_SPEED = 1_tps;
